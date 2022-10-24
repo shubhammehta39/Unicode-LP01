@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+
+<body>
+    <div class="container">
+        <!-- <div class="container"></div> -->
+        <div class="buttons">
+            <button class="innerbtn btn btn-secondary" id="getdata">get data</button>
+
+            <button class="innerbtn btn btn-secondary" id="createposts">create post</button>
+            <button class="innerbtn btn btn-secondary" id="editposts">edit post</button>
+            <button class="innerbtn btn btn-secondary" id="deletepost">delete Post</button>
+        </div>
+        <!-- <button>edit data</button> -->
+
+        <!-- <button id="create-post">create-post</button>text-bg-primary  -->
+        <div class="card ">
+            <!-- <div class="card-body">
+                <div id="output" class="outputdisp" bg-primary text-white></div>
+
+            </div> -->
+            <div id="output" class="outputdisp" bg-primary text-white></div>
+            <!-- <div class="card-body">
+                <div id="output"></div>
+            </div> -->
+        </div>
+        <!-- <div id="output"> -->
+
+
+        <div class="form1">
+            <h1>Create Post</h1>
+            <form id="createpost">
+                <!-- <button id="create-posts">create-post</button> -->
+                <div>
+                    <input type="text" placeholder="title" id="title">
+                    <!-- </textarea> -->
+                </div>
+                <div>
+                    <textarea id="body" placeholder="body"> </textarea>
+                </div>
+                <input class="btn btn-primary" id="submit" type="Submit">
+            </form>
+        </div>
+
+        <hr>
+        <div>
+            <h1>Edit Post</h1>
+            <form id="editpost">
+                <!-- <button id="create-posts">create-post</button> -->
+                <div>
+                    <input type="text " id="edittitle" placeholder="title">
+                    <!-- <textarea id="body" type="text" placeholder="body" width="450px" height="150px"> -->
+                    <!-- </textarea> -->
+                </div>
+                <div>
+                    <textarea id="editbody" placeholder="body"> </textarea>
+                </div>
+                <input class="btn btn-primary" id="editsubmit" type="Submit">
+            </form>
+        </div>
+    </div>
+
+
+
+
+    <!-- <script src="script.js"></script> -->
+
+
+    <script>
+
+        document.getElementById('getdata').addEventListener
+            ('click', getdata);
+        document.getElementById('createpost').addEventListener
+            ('submit', createpost);
+        document.getElementById('editpost').addEventListener
+            ('submit', editpost);
+        document.getElementById('deletepost').addEventListener
+            ('click', deletepost);
+        // document.getElementById('createposts').addEventListener
+        //     ('click', createposts);
+        // document.getElementById('editpost').addEventListener
+        //     ('submite', editpost);
+
+
+        function getdata() {
+            fetch('http://jsonplaceholder.typicode.com/posts')
+                .then((res) => res.json())
+                .then((data) => {
+                    let output = '<h2>posts</h2>';
+                    data.forEach(function (post) {
+                        output +=
+                            `
+                            <h3>${post.title}</h3>
+                            <p>${post.body}</p>
+                            ` ;
+
+
+                    });
+                    // console.log(output);
+                    document.getElementById('output').innerHTML = output;
+                })
+        }
+
+
+        function createpost(e) {
+            e.preventDefault();
+
+            let title = document.getElementById('title').value;
+            let body = document.getElementById('body').value;
+
+            fetch('http://jsonplaceholder.typicode.com/posts', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json, text/plain',
+                    'Content-type': 'application/json'
+
+                },
+                body: JSON.stringify({ title: title, body: body })
+            })
+                .then((res) => res.json())
+                .then((data) => console.log(data))
+
+
+        }
+        // function createposts() {
+        //     createpost(); aisa function call nhi kar sakte error handling nhi hoga
+        // }
+
+
+        function editpost(e) {
+            e.preventDefault();
+
+            let title = document.getElementById('edittitle').value;
+            let body = document.getElementById('editbody').value;
+
+            fetch('http://jsonplaceholder.typicode.com/posts/4', {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json, text/plain',
+                    'Content-type': 'application/json'
+
+                },
+                body: JSON.stringify({ title: title, body: body })
+            })
+                .then((res) => res.json())
+                .then((data) => console.log(data))
+
+
+        }
+        function deletepost() {
+            fetch('http://jsonplaceholder.typicode.com/posts', {
+                method: 'DELETE',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+
+            })
+                .then(res => {
+                    if (res.ok) { console.log("DELETE SUCCESS") }
+                    else { console.log("DELETE UNSUCCESSFUL") }
+                    return res
+
+                }).then(res => console.log(res))
+        }
+    </script>
+</body>
+
+</html>
